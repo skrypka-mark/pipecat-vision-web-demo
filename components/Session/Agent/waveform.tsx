@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import { useVoiceClientMediaTrack } from "realtime-ai-react";
+import { useRTVIClientMediaTrack } from "realtime-ai-react";
 
 const WaveForm: React.FC = React.memo(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const track: MediaStreamTrack | null = useVoiceClientMediaTrack(
+  const track: MediaStreamTrack | null = useRTVIClientMediaTrack(
     "audio",
     "bot"
   );

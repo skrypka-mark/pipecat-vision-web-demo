@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { LineChart, LogOut, Settings, StopCircle } from "lucide-react";
-import { PipecatMetrics, TransportState, VoiceEvent } from "realtime-ai";
-import { useVoiceClient, useVoiceClientEvent } from "realtime-ai-react";
+import { PipecatMetricsData, RTVIEvent, TransportState } from "realtime-ai";
+import { useRTVIClient, useRTVIClientEvent } from "realtime-ai-react";
 
 import StatsAggregator from "../../utils/stats_aggregator";
 import { Configure } from "../Setup";
 import { Button } from "../ui/button";
+import CameraFlipButton from "../ui/camera-flip-button";
 import * as Card from "../ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
@@ -25,26 +26,26 @@ interface SessionProps {
 
 export const Session = React.memo(
   ({ state, onLeave, startAudioOff = false }: SessionProps) => {
-    const voiceClient = useVoiceClient()!;
+    const voiceClient = useRTVIClient()!;
     const [hasStarted, setHasStarted] = useState<boolean>(false);
     const [showDevices, setShowDevices] = useState<boolean>(false);
     const [showStats, setShowStats] = useState<boolean>(false);
     const [muted, setMuted] = useState(startAudioOff);
     const modalRef = useRef<HTMLDialogElement>(null);
 
-    // ---- Voice Client Events
+    // ---- RTVI Client Events
 
-    useVoiceClientEvent(
-      VoiceEvent.Metrics,
-      useCallback((metrics: PipecatMetrics) => {
+    useRTVIClientEvent(
+      RTVIEvent.Metrics,
+      useCallback((metrics: PipecatMetricsData) => {
         metrics?.ttfb?.map((m: { processor: string; value: number }) => {
           stats_aggregator.addStat([m.processor, "ttfb", m.value, Date.now()]);
         });
       }, [])
     );
 
-    useVoiceClientEvent(
-      VoiceEvent.BotStoppedSpeaking,
+    useRTVIClientEvent(
+      RTVIEvent.BotStoppedSpeaking,
       useCallback(() => {
         if (hasStarted) return;
         setHasStarted(true);
@@ -179,6 +180,14 @@ export const Session = React.memo(
                 >
                   <Settings />
                 </Button>
+              </TooltipTrigger>
+            </Tooltip>
+            <Tooltip>
+              <TooltipContent>Flip camera</TooltipContent>
+              <TooltipTrigger asChild>
+                <div>
+                  <CameraFlipButton />
+                </div>
               </TooltipTrigger>
             </Tooltip>
             <Button onClick={() => onLeave()} className="ml-auto">

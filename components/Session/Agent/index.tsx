@@ -1,8 +1,12 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import { Loader2 } from "lucide-react";
-import { VoiceEvent } from "realtime-ai";
-import { useVoiceClientEvent, VoiceClientVideo } from "realtime-ai-react";
+import { RTVIEvent } from "realtime-ai";
+import { RTVIClientVideo, useRTVIClientEvent } from "realtime-ai-react";
+
+import { cn } from "@/utils/tailwind";
+
+import CameraFlipButton from "../../ui/camera-flip-button";
 
 import ModelBadge from "./model";
 import WaveForm from "./waveform";
@@ -27,23 +31,23 @@ export const Agent: React.FC<{
       setBotStatus("connected");
     }, [isReady]);
 
-    useVoiceClientEvent(
-      VoiceEvent.BotDisconnected,
+    useRTVIClientEvent(
+      RTVIEvent.BotDisconnected,
       useCallback(() => {
         setHasStarted(false);
         setBotStatus("disconnected");
       }, [])
     );
 
-    useVoiceClientEvent(
-      VoiceEvent.BotStartedSpeaking,
+    useRTVIClientEvent(
+      RTVIEvent.BotStartedSpeaking,
       useCallback(() => {
         setBotIsTalking(true);
       }, [])
     );
 
-    useVoiceClientEvent(
-      VoiceEvent.BotStoppedSpeaking,
+    useRTVIClientEvent(
+      RTVIEvent.BotStoppedSpeaking,
       useCallback(() => {
         setBotIsTalking(false);
       }, [])
@@ -59,7 +63,7 @@ export const Agent: React.FC<{
     );
 
     return (
-      <div className={styles.agent}>
+      <div className={cn(styles.agent, "relative")}>
         <div className={cx}>
           <ModelBadge />
           {!hasStarted ? (
@@ -70,11 +74,14 @@ export const Agent: React.FC<{
             <WaveForm />
           )}
         </div>
-        <VoiceClientVideo
+        <RTVIClientVideo
           participant="local"
           mirror={true}
           className={styles.video}
         />
+        <div className="absolute top-4 right-4 z-10">
+          <CameraFlipButton />
+        </div>
       </div>
     );
   },

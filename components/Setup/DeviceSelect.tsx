@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Mic, Webcam } from "lucide-react";
-import { useVoiceClientMediaDevices } from "realtime-ai-react";
+import { useRTVIClientMediaDevices } from "realtime-ai-react";
 
 import { Field } from "../ui/field";
 import { Select } from "../ui/select";
@@ -21,7 +21,7 @@ export const DeviceSelect: React.FC<DeviceSelectProps> = ({
     availableCams,
     selectedCam,
     updateCam,
-  } = useVoiceClientMediaDevices();
+  } = useRTVIClientMediaDevices();
 
   useEffect(() => {
     updateMic(selectedMic?.deviceId);
