@@ -27,7 +27,7 @@ interface SessionProps {
 export const Session = React.memo(
   ({ state, onLeave, startAudioOff = false }: SessionProps) => {
     const voiceClient = useRTVIClient()!;
-    const [hasStarted, setHasStarted] = useState<boolean>(false);
+    const [hasStarted, setHasStarted] = useState<boolean>(true);
     const [showDevices, setShowDevices] = useState<boolean>(false);
     const [showStats, setShowStats] = useState<boolean>(false);
     const [muted, setMuted] = useState(startAudioOff);
@@ -44,13 +44,13 @@ export const Session = React.memo(
       }, [])
     );
 
-    useRTVIClientEvent(
-      RTVIEvent.BotStoppedSpeaking,
-      useCallback(() => {
-        if (hasStarted) return;
-        setHasStarted(true);
-      }, [hasStarted])
-    );
+    // useRTVIClientEvent(
+    //   RTVIEvent.BotStoppedSpeaking,
+    //   useCallback(() => {
+    //     if (hasStarted) return;
+    //     setHasStarted(true);
+    //   }, [hasStarted])
+    // );
 
     // ---- Effects
 

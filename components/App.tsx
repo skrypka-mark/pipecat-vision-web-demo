@@ -78,7 +78,7 @@ export default function App() {
       // to avoid interrupting the bot's welcome message
       voiceClient.enableMic(false);
 
-      await voiceClient.start();
+      await voiceClient.connect();
     } catch (e) {
       setError((e as RTVIError).message || "Unknown error occured");
       voiceClient.disconnect();

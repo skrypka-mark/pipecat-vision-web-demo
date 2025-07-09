@@ -1,4 +1,4 @@
-export const BOT_READY_TIMEOUT = 30 * 1000; // 30 seconds
+export const BOT_READY_TIMEOUT = 15 * 1000; // 15 seconds
 
 export const defaultBotProfile = "vision_2024_10";
 export const defaultMaxDuration = 600;
