@@ -54,10 +54,10 @@ export const Session = React.memo(
 
     // ---- Effects
 
-    useEffect(() => {
-      // Reset started state on mount
-      setHasStarted(false);
-    }, []);
+    // useEffect(() => {
+    //   // Reset started state on mount
+    //   setHasStarted(false);
+    // }, []);
 
     useEffect(() => {
       // If we joined unmuted, enable the mic once in ready state
