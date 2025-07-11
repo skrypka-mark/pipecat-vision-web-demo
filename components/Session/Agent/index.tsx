@@ -2,7 +2,11 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import { Loader2 } from "lucide-react";
 import { RTVIEvent } from "realtime-ai";
-import { RTVIClientVideo, useRTVIClientEvent } from "realtime-ai-react";
+import {
+  RTVIClientVideo,
+  useRTVIClientEvent,
+  useRTVIClientMediaDevices,
+} from "realtime-ai-react";
 
 import { cn } from "@/utils/tailwind";
 
@@ -18,11 +22,26 @@ export const Agent: React.FC<{
   statsAggregator: StatsAggregator;
 }> = memo(
   ({ isReady, statsAggregator }) => {
+    const { selectedCam } = useRTVIClientMediaDevices();
+
     const [hasStarted, setHasStarted] = useState<boolean>(false);
     const [botStatus, setBotStatus] = useState<
       "initializing" | "connected" | "disconnected"
     >("initializing");
     const [botIsTalking, setBotIsTalking] = useState<boolean>(false);
+
+    // Determine if current camera should be mirrored
+    const shouldMirror = React.useMemo(() => {
+      if (!selectedCam) return true; // Default to mirrored for front camera
+
+      const isBackCamera =
+        selectedCam.label.toLowerCase().includes("back") ||
+        selectedCam.label.toLowerCase().includes("rear") ||
+        selectedCam.label.toLowerCase().includes("environment");
+
+      // Only mirror front-facing cameras, not back cameras
+      return !isBackCamera;
+    }, [selectedCam]);
 
     useEffect(() => {
       // Update the started state when the transport enters the ready state
@@ -76,7 +95,7 @@ export const Agent: React.FC<{
         </div>
         <RTVIClientVideo
           participant="local"
-          mirror={true}
+          mirror={shouldMirror}
           className={styles.video}
         />
         <div className="absolute top-4 right-4 z-10">
