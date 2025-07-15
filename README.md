@@ -22,7 +22,7 @@ Uses `vision_2024_08` [Daily Bot profile](https://docs.dailybots.ai/api-referenc
 ### Configure your local environment
 
 ```shell
-cp env.example .env.local
+cp .env.example .env.local
 ```
 
 `NEXT_PUBLIC_BASE_URL` defaults to `/api`, which is configured as Next server-side route handler. You can pass through service API keys, override service and config options within this route.
