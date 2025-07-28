@@ -13,6 +13,7 @@ export async function POST(request: Request) {
     dailyRoomProperties: {
       // Room properties - recording will be controlled via Pipecat
       enable_recording: "cloud",
+      // enable_transcription_storage: true,
     },
     body: {
       // Custom data that will be accessible in your bot.py file
